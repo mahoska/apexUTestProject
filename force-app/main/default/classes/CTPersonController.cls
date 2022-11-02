@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 10-31-2022
+ * @last modified on  : 11-02-2022
  * @last modified by  : Anna Makhovskaya
 **/
 public with sharing class CTPersonController {
@@ -56,15 +56,30 @@ public with sharing class CTPersonController {
      */ 
     public static Person__c getPersonById(String personId){
         
-        List<Person__c> listPerson = [SELECT Id, Name, Health_Status__c, Mobile__c, Status_Update_Date__c, Token__c 
+        List<Person__c> personList = [SELECT Id, Name, Health_Status__c, Mobile__c, Status_Update_Date__c, Token__c 
                             FROM Person__c 
                             WHERE Id = :personId];
 
-        if(listPerson != NULL && listPerson.size() > 0){
-            return listPerson[0];
+        if(personList != NULL && personList.size() > 0){
+            return personList[0];
         }
 
         return NULL;
+    }
+
+    /**
+     * get count of people in each Health Status
+     * @return  Map<String, Integer>
+     */ 
+    public static Map<String, Integer> getHealthStatusCount(){ 
+
+        Map<String, Integer> peopleByStatusMap = new Map<String, Integer>();
+
+        for(AggregateResult agrRes : [SELECT  Health_Status__c, COUNT(Id) countPeopleByStatus FROM Person__c GROUP BY Health_Status__c]){
+            peopleByStatusMap.put(String.valueOf(agrRes.get('Health_Status__c')),Integer.valueOf(agrRes.get('countPeopleByStatus')));
+        }
+
+        return peopleByStatusMap;
     }
 
 }

@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 10-31-2022
+ * @last modified on  : 11-02-2022
  * @last modified by  : Anna Makhovskaya
 **/
 public with sharing class CTLocationController {
@@ -48,6 +48,21 @@ public with sharing class CTLocationController {
             return locationList[0];
         }
         return NULL;
+    }
+
+     /**
+     * get count of location in each  Status
+     * @return  Map<String, Integer>
+     */ 
+    public static Map<String, Integer> getStatusCount(){ 
+
+        Map<String, Integer> locationByStatusMap = new Map<String, Integer>();
+
+        for(AggregateResult agrRes : [SELECT  Status__c, COUNT(Id) countLocationByStatus FROM Location__c GROUP BY Status__c]){
+            locationByStatusMap.put(String.valueOf(agrRes.get('Status__c')),Integer.valueOf(agrRes.get('countLocationByStatus')));
+        }
+
+        return locationByStatusMap;
     }
 
 
