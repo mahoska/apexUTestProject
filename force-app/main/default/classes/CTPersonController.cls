@@ -139,4 +139,20 @@ public with sharing class CTPersonController {
         return secondaryContactsSet;
     }
 
+
+    public static void updateRedStatusByLocation(Set<Id> locationIdsSet){
+
+        List<Person__c> personToUpdateList = new List<Person__c>();
+
+        List<Location_Tracing__c> locationTracingList = CTLocationTracingController.getPeopleByRedLocation(locationIdsSet);
+
+        for(Location_Tracing__c lt : locationTracingList){
+            personToUpdateList.add(new Person__c(Id=lt.Person__c, Health_Status__c='Yellow'));
+        } 
+        
+        if(personToUpdateList != NUll && personToUpdateList.size() > 0){
+            update personToUpdateList;
+        }
+    }
+
 }

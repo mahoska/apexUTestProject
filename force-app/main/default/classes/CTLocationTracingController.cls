@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 10-31-2022
+ * @last modified on  : 11-07-2022
  * @last modified by  : Anna Makhovskaya
 **/
 public with sharing class CTLocationTracingController {
@@ -91,5 +91,16 @@ public with sharing class CTLocationTracingController {
         }   
         
         return duplicatesList;      
+    }
+
+
+    public static List<Location_Tracing__c> getPeopleByRedLocation (Set<Id> locationIdsSet){
+        return [
+            SELECT Person__c
+            FROM Location_Tracing__c 
+            WHERE Location__r.Status__c = 'Red' AND Visit_Date__c = LAST_N_DAYS:10 AND Location__c IN :locationIdsSet 
+            AND Person__r.Health_Status__c = 'Green'
+        ];
+
     }
 }

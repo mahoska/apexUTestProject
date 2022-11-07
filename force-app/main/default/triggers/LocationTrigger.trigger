@@ -15,7 +15,9 @@ trigger LocationTrigger on Location__c (before insert, after insert, before upda
         when BEFORE_UPDATE {
             LocationTriggerHandler.beforeUpdateHandler(Trigger.new, Trigger.oldMap);
         }
-        when AFTER_UPDATE {}
+        when AFTER_UPDATE {
+            LocationTriggerHandler.afterUpdateHandler(Trigger.new, Trigger.oldMap);
+        }
         when BEFORE_DELETE {}
         when AFTER_DELETE {}
         when AFTER_UNDELETE {}

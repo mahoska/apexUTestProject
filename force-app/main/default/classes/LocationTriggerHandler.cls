@@ -27,4 +27,25 @@ public with sharing class LocationTriggerHandler {
             }
         }
     }
+
+    //if location's Status changes to RED
+    //Mark all people Yellow who have visited the location in last 10 days - Except the Red and Orang ones
+    public static void afterUpdateHandler(List<Location__c> newRecordsList, Map<Id, Location__c> oldRecordsMap) {
+
+        if(newRecordsList !=NULL && newRecordsList.size() > 0){
+
+            Set<Id> redStatusLocationsSet = new Set<Id>();
+
+            for(Location__c loc : newRecordsList){
+                if(loc.Status__c != oldRecordsMap.get(loc.Id).Status__c && loc.Status__c == 'Red' && oldRecordsMap.get(loc.Id).Status__c != 'Red'){
+                    redStatusLocationsSet.add(loc.Id);
+                }
+            }
+
+            if(redStatusLocationsSet !=NULL && redStatusLocationsSet.size() > 0){
+                CTPersonController.updateRedStatusByLocation(redStatusLocationsSet);
+            }
+        }
+        
+    }
 }
