@@ -29,7 +29,18 @@ public with sharing class PersonTriggerHandler {
         }
     }
 
-
+/**
+ * @description 1)if Person's Health Status changes
+ *              Update the Red Score and Status of all location they visited in last 10 days
+ * 2)If person's Health Status updates to RED
+ * Mark all people 'Cohabitans' Orange - Except the Red and Orange ones
+ * Mark all primary contacts Orange - Except the Red and Orange ones (Other who contact last 10 days)
+ * Mark all people 'Neighbours' Yellow - Except the Red and Orange, Yellow  ones
+ * Mark all secondary contacts Yellow - Except the Red and Orange, Yellow ones (Other who contact with primary last 10 days)
+ *  Update the Red Score and Status of all location they visited in last 10 days
+ * @param  Map<Id,Person__c> oldRecordsMap
+ * @param  List<Person__c> newRecordsList 
+ */ 
     public static void afterUpdateHandler(Map<Id,Person__c> oldRecordsMap, List<Person__c> newRecordsList ){
 
         if(newRecordsList !=NULL && newRecordsList.size() > 0){
@@ -51,6 +62,7 @@ public with sharing class PersonTriggerHandler {
             Set<Id> orangeStatusSet = new  Set<Id>();
             Set<Id> yellowStatusSet = new  Set<Id>();
 
+            //so that in the process of selecting contacts not to take into account the previously considered
             Set<Id> alreadyProcessIdsSet = new Set<Id>();
             alreadyProcessIdsSet.addAll(redStatusIdsSet);
 
@@ -76,6 +88,7 @@ public with sharing class PersonTriggerHandler {
                 update personToUpdateList;
             }
 
+            //Update the Red Score and Status of all location they visited in last 10 days
             List<Location_Tracing__c> locationTracingList = CTLocationTracingController.getLocationsByPersonIds(statusChangeIdsSet);
             if(locationTracingList != NULL && locationTracingList.size() > 0){
                 Set<Id> locationIdsSet = new Set<Id>();

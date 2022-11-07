@@ -82,19 +82,18 @@ public with sharing class CTPersonController {
         return peopleByStatusMap;
     }
 
-
+    /*
+    //template previous version
     public static Set<Id> getCohabitans(Set<Id> personIdsSet, Set<Id> alreadyProcessIdsSet){
         List<String> healthStatusList = new List<String>{'Green', 'Yellow'};
-        /*List<People_Tracing__c> peopleTracingList =  
+        List<People_Tracing__c> peopleTracingList =  
                     [SELECT Id, Person_1__c, Person_2__c 
                     FROM People_Tracing__c 
                     WHERE (Person_1__c IN :personIdsSet OR Person_2__c IN :personIdsSet) AND
                     Contact_Type__c = 'Cohabitant' AND
                     (Person_1__r.Health_Status__c IN :healthStatusList OR Person_2__r.Health_Status__c IN :healthStatusList)];
-        */
-        List<People_Tracing__c> peopleTracingList = CTPersonHelper.getContactsByTypeList(healthStatusList, personIdsSet, 'Cohabitant', FALSE);
 
-        /*Set<Id> cohabitantsSet = new Set<Id>();
+        Set<Id> cohabitantsSet = new Set<Id>();
         for(People_Tracing__c pt : peopleTracingList)  {
             if(!alreadyProcessIdsSet.contains(pt.Person_1__c)){
                 cohabitantsSet.add(pt.Person_1__c);
@@ -104,94 +103,39 @@ public with sharing class CTPersonController {
                 cohabitantsSet.add(pt.Person_2__c);
                 alreadyProcessIdsSet.add(pt.Person_2__c);
             }
-        }   */
-        
-        Set<Id> cohabitantsSet = CTPersonHelper.getContactsByTypeSet(peopleTracingList, alreadyProcessIdsSet);  
+        }
+        return cohabitantsSet;
+    }*/
 
+    public static Set<Id> getCohabitans(Set<Id> personIdsSet, Set<Id> alreadyProcessIdsSet){
+        List<String> healthStatusList = new List<String>{'Green', 'Yellow'};
+        List<People_Tracing__c> peopleTracingList = CTPersonHelper.getContactsByTypeList(healthStatusList, personIdsSet, 'Cohabitant', FALSE);
+
+        Set<Id> cohabitantsSet = CTPersonHelper.getContactsByTypeSet(peopleTracingList, alreadyProcessIdsSet);  
         return cohabitantsSet;
     }
 
     public static Set<Id> getNeighbours(Set<Id> personIdsSet, Set<Id> alreadyProcessIdsSet){
         List<String> healthStatusList = new List<String>{'Green'};
-        /*List<People_Tracing__c> peopleTracingList =  
-                    [SELECT Id, Person_1__c, Person_2__c 
-                    FROM People_Tracing__c 
-                    WHERE (Person_1__c IN :personIdsSet OR Person_2__c IN :personIdsSet) AND
-                    Contact_Type__c = 'Neighbour' AND
-                    (Person_1__r.Health_Status__c IN :healthStatusList OR Person_2__r.Health_Status__c IN :healthStatusList)];
-        */
         List<People_Tracing__c> peopleTracingList = CTPersonHelper.getContactsByTypeList(healthStatusList, personIdsSet, 'Neighbour', FALSE);
 
-        /*Set<Id> neighboursSet = new Set<Id>();
-        for(People_Tracing__c pt : peopleTracingList)  {
-            if(!alreadyProcessIdsSet.contains(pt.Person_1__c)){
-                neighboursSet.add(pt.Person_1__c);
-                alreadyProcessIdsSet.add(pt.Person_1__c);
-            }
-            if(!alreadyProcessIdsSet.contains(pt.Person_2__c)){
-                neighboursSet.add(pt.Person_2__c);
-                alreadyProcessIdsSet.add(pt.Person_2__c);
-            }
-        } */
         Set<Id> neighboursSet = CTPersonHelper.getContactsByTypeSet(peopleTracingList, alreadyProcessIdsSet);  
-        
         return neighboursSet;
     }
 
     public static Set<Id> getPrimaryContacts(Set<Id> personIdsSet, Set<Id> alreadyProcessIdsSet){
         List<String> healthStatusList = new List<String>{'Green', 'Yellow'};
-        /*List<People_Tracing__c> peopleTracingList =  
-                    [SELECT Id, Person_1__c, Person_2__c 
-                    FROM People_Tracing__c 
-                    WHERE (Person_1__c IN :personIdsSet OR Person_2__c IN :personIdsSet)   
-                    AND Contact_Type__c = 'Other' 
-                    AND Contact_Date__c = LAST_N_DAYS:10  
-                    AND (Person_1__r.Health_Status__c IN :healthStatusList OR Person_2__r.Health_Status__c IN :healthStatusList)];
-        */
         List<People_Tracing__c> peopleTracingList = CTPersonHelper.getContactsByTypeList(healthStatusList, personIdsSet, 'Other', TRUE);
 
-        /*Set<Id> primaryContactsSet = new Set<Id>();
-        for(People_Tracing__c pt : peopleTracingList)  {
-            if(!alreadyProcessIdsSet.contains(pt.Person_1__c)){
-                primaryContactsSet.add(pt.Person_1__c);
-                alreadyProcessIdsSet.add(pt.Person_1__c);
-            }
-            if(!alreadyProcessIdsSet.contains(pt.Person_2__c)){
-                primaryContactsSet.add(pt.Person_2__c);
-                alreadyProcessIdsSet.add(pt.Person_2__c);
-            }
-        }   
-        */
         Set<Id> primaryContactsSet = CTPersonHelper.getContactsByTypeSet(peopleTracingList, alreadyProcessIdsSet);
-
         return primaryContactsSet;
     }
 
     public static Set<Id> getSecondaryContacts(Set<Id> primaryContactIdsSet, Set<Id> alreadyProcessIdsSet){
         List<String> healthStatusList = new List<String>{'Green'};
-        /*List<People_Tracing__c> peopleTracingList =  
-                    [SELECT Id, Person_1__c, Person_2__c 
-                    FROM People_Tracing__c 
-                    WHERE (Person_1__c IN :primaryContactIdsSet OR Person_2__c IN :primaryContactIdsSet)   
-                    AND Contact_Type__c = 'Other' 
-                    AND Contact_Date__c = LAST_N_DAYS:10  
-                    AND (Person_1__r.Health_Status__c IN :healthStatusList OR Person_2__r.Health_Status__c IN :healthStatusList)];
-        */
         List<People_Tracing__c> peopleTracingList = CTPersonHelper.getContactsByTypeList(healthStatusList, primaryContactIdsSet, 'Other', TRUE);
-        
-        /*Set<Id> secondaryContactsSet = new Set<Id>();
-        for(People_Tracing__c pt : peopleTracingList)  {
-            if(!alreadyProcessIdsSet.contains(pt.Person_1__c)){
-                secondaryContactsSet.add(pt.Person_1__c);
-                alreadyProcessIdsSet.add(pt.Person_1__c);
-            }
-            if(!alreadyProcessIdsSet.contains(pt.Person_2__c)){
-                secondaryContactsSet.add(pt.Person_2__c);
-                alreadyProcessIdsSet.add(pt.Person_2__c);
-            }
-        } */  
+         
         Set<Id> secondaryContactsSet = CTPersonHelper.getContactsByTypeSet(peopleTracingList, alreadyProcessIdsSet);
-
         return secondaryContactsSet;
     }
 
