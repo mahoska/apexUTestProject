@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 11-02-2022
+ * @last modified on  : 11-07-2022
  * @last modified by  : Anna Makhovskaya
 **/
 public with sharing class CTLocationController {
@@ -64,6 +64,45 @@ public with sharing class CTLocationController {
 
         return locationByStatusMap;
     }
+
+
+    public static void updateRedScore(Set<Id> locationIdsSet){
+
+        List<Location__c> locationToUpdateList = new List<Location__c>();
+
+        AggregateResult[] redPeoplePerLocation = [
+                    SELECT Location__c, COUNT(Id) total  
+                    FROM Location_Tracing__c 
+                    WHERE Person__r.Health_Status__c = 'Red' AND Visit_Date__c = LAST_N_DAYS:10 AND Location__c IN :locationIdsSet
+                    GROUP BY Location__c];
+
+        for(AggregateResult ar : redPeoplePerLocation){
+            String locationId = String.valueOf(ar.get('Location__c'));
+            Integer redScore = Integer.valueOf(ar.get('total'));
+            String status = getStatus(redScore);
+
+            locationToUpdateList.add(new Location__c(Id=locationId, Red_Score__c=redScore, Status__c=status));
+        } 
+        
+        if(locationToUpdateList != NUll && locationToUpdateList.size() > 0){
+            update locationToUpdateList;
+        }
+    }
+
+
+    public static String getStatus(Integer redScore){
+        if(redScore == 0){
+            return 'Green';
+        }else if(redScore <= 5){
+            return 'Yellow';
+        }else if(redScore <=10){
+            return 'Orange';
+        }else{
+            return 'Red';
+        }
+    }
+
+
 
 
 }
