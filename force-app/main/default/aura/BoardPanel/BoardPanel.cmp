@@ -1,0 +1,52 @@
+<!--
+  @description       : 
+  @author            : Anna Makhovskaya
+  @group             : 
+  @last modified on  : 11-15-2022
+  @last modified by  : Anna Makhovskaya
+-->
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <aura:attribute name="modes" type="List" default="[
+    {'label': 'Easy', 'value': 'easy'},
+    {'label': 'Medium  ', 'value': 'medium'},
+    {'label': 'Hard', 'value': 'hard'},
+    ]"/>
+
+    <aura:attribute name="selectedMode" type="String" />
+
+    <lightning:card  title="Word Shuffle">
+        <lightning:layout horizontalAlign="center" multipleRows="true">
+            <lightning:layoutItem   padding="around-small">
+                <lightning:combobox 
+                    name="gameMode" 
+                    label="Game Mode" 
+                    value="inProgress" 
+                    variant="label-hidden"
+                    placeholder="Select Game Mode" 
+                    options="{!v.modes}" 
+                    aura:id="gameMode"
+                />
+            </lightning:layoutItem>
+            <lightning:layoutItem  padding="around-small">
+                <lightning:button 
+                    aura:id="startGameButton" 
+                    variant="brand" 
+                    label="Start New Game" 
+                    title="Start New Game" 
+                    onclick="{!c.startGame}"/>
+            </lightning:layoutItem>
+            <lightning:layoutItem  padding="around-small">
+                <lightning:button  label="Reshuffle" title="Reshuffle" onclick="{!c.reshuffleBoard}"/>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <aura:if isTrue="{! (v.selectedMode != null)}">
+            <lightning:layoutItem size="12"> 
+                <c:Board mode="{!v.selectedMode}" ></c:Board>
+            </lightning:layoutItem>
+        </aura:if>
+        
+    </lightning:card>
+
+    
+</aura:component>	

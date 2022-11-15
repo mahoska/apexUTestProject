@@ -1,0 +1,36 @@
+<!--
+  @description       : 
+  @author            : Anna Makhovskaya
+  @group             : 
+  @last modified on  : 11-15-2022
+  @last modified by  : Anna Makhovskaya
+-->
+<aura:component implements="flexipage:availableForAllPageTypes">
+    <aura:attribute name="mode" type="String" default="hard"  />
+
+    <aura:attribute name="words" type="List" access="private" />
+    <aura:attribute name="winWord" type="String"  access="private"/>
+    <aura:attribute name="clickCount" type="Integer" default="0"  access="private"/>
+    <aura:attribute name="blockSize" type="Integer"  access="private"/>
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+
+    <div class="board">
+        <lightning:layout >
+            <lightning:layoutItem  padding="around-small">
+                <div class="slds-text-heading_medium">WORD : <span class="win-word">{!v.winWord}</span></div>
+            </lightning:layoutItem>
+            <lightning:layoutItem  padding="around-small">
+                <div class="slds-text-heading_medium">Left: {! (3 - v.clickCount)}</div>
+            </lightning:layoutItem>
+        </lightning:layout>
+
+        <lightning:layout multipleRows="true">
+            <aura:iteration items="{!v.words}" var="word">
+                <lightning:layoutItem size="{!v.blockSize}" padding="around-small">
+                    <c:Block label="{!word}" />
+                </lightning:layoutItem>
+            </aura:iteration>
+        </lightning:layout>
+    </div>
+</aura:component>	
