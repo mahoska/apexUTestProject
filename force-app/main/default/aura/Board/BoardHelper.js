@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 11-15-2022
+ * @last modified on  : 11-16-2022
  * @last modified by  : Anna Makhovskaya
 **/
 ({
@@ -132,5 +132,21 @@
     getWinWord: function (arr) {
         const randomIndex = Math.floor(Math.random() * arr.length);
         return arr[randomIndex];
+    },
+
+    disableBoard: function (component) {
+        component.set("v.boardDisable", true);
+    },
+
+    enableBoard: function (component) {
+        component.set("v.boardDisable", false);
+    },
+
+    resetBoard: function (component) {
+        this.enableBoard(component);
+        //reset count click
+        component.set("v.clickCount", 0);
+        //reset result
+        component.set("v.result", "");
     }
 })

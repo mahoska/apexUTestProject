@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 11-15-2022
+ * @last modified on  : 11-16-2022
  * @last modified by  : Anna Makhovskaya
 **/
 ({
@@ -10,6 +10,12 @@
         const open = component.get("v.open");
         if (open === false) {
             component.set("v.open", true);
+            //get label value
+            let label = component.get('v.label');
+            //fire the block event
+            let compEvent = component.getEvent("onclick");
+            compEvent.setParams({ value: label });
+            compEvent.fire();
         }
     }
 })
