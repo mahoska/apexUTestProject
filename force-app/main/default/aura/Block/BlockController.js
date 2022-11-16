@@ -17,5 +17,11 @@
             compEvent.setParams({ value: label });
             compEvent.fire();
         }
+    },
+
+    scriptsLoaded: function (component, event, helper) {
+        console.log('Library Loaded!!!');
+        const divElement = component.getElement(".board-block");
+        fitText(divElement);
     }
 })
