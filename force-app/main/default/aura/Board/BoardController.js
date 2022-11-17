@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 11-16-2022
+ * @last modified on  : 11-17-2022
  * @last modified by  : Anna Makhovskaya
 **/
 ({
@@ -37,16 +37,25 @@
         if (value === component.get("v.winWord")) {
             //user won
             component.set("v.result", "YOU WIN");
-            console.log("YOU WIN");
+            //console.log("YOU WIN");
             helper.disableBoard(component);
+            helper.fireResultEvent("win");
         } else if (clickCount === 3) {
             //user lose
             component.set("v.result", "YOU LOSE");
-            console.log("YOU LOSE");
+            //console.log("YOU LOSE");
             helper.disableBoard(component);
+            helper.fireResultEvent("lose");
         }
         component.set("v.clickCount", clickCount);
     },
+
+    reshuffleBoard: function (component, event, helper) {
+        const words = component.get("v.words");
+        const randomizeWords = helper.randomizeArray(words);
+        component.set('v.words', randomizeWords);
+        helper.resetBoard(component);
+    }
 
 
 

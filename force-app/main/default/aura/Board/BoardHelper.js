@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 11-16-2022
+ * @last modified on  : 11-17-2022
  * @last modified by  : Anna Makhovskaya
 **/
 ({
@@ -113,8 +113,12 @@
         ];
         // Randomize the words array
         wordsArray = this.randomizeArray(wordsArray);
+        //open=false property
+        const wordObjectArray = wordsArray.map((element) => {
+            return { word: element, open: false };
+        })
         // return requested words
-        return wordsArray.slice(0, count);
+        return wordObjectArray.slice(0, count);
     },
 
     randomizeArray: function (arr) {
@@ -131,7 +135,7 @@
 
     getWinWord: function (arr) {
         const randomIndex = Math.floor(Math.random() * arr.length);
-        return arr[randomIndex];
+        return arr[randomIndex].word;
     },
 
     disableBoard: function (component) {
@@ -148,5 +152,11 @@
         component.set("v.clickCount", 0);
         //reset result
         component.set("v.result", "");
+    },
+
+    fireResultEvent: function (resultValue) {
+        const appEvent = $A.get("e.c:ResultApplicationEvent");
+        appEvent.setParams({ result: resultValue });
+        appEvent.fire();
     }
 })

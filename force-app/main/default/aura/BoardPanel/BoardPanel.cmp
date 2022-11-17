@@ -2,10 +2,10 @@
   @description       : 
   @author            : Anna Makhovskaya
   @group             : 
-  @last modified on  : 11-16-2022
+  @last modified on  : 11-17-2022
   @last modified by  : Anna Makhovskaya
 -->
-<aura:component implements="flexipage:availableForAllPageTypes">
+<aura:component implements="flexipage:availableForAllPageTypes" controller="Game_BoardPanelController">
     <aura:attribute name="modes" type="List" default="[
     {'label': 'Easy', 'value': 'easy'},
     {'label': 'Medium  ', 'value': 'medium'},
@@ -13,6 +13,9 @@
     ]"/>
 
     <aura:attribute name="selectedMode" type="String" />
+    <aura:attribute name="reshuffleDisabled" type="Boolean" />
+
+    <aura:handler event="c:ResultApplicationEvent" action="{!c.onResultHandler}"/>
 
     <lightning:card  title="Word Shuffle">
         <lightning:layout horizontalAlign="center" multipleRows="true">
@@ -37,7 +40,7 @@
                     onclick="{!c.startGame}"/>
             </lightning:layoutItem>
             <lightning:layoutItem  padding="around-small">
-                <lightning:button  label="Reshuffle" title="Reshuffle" onclick="{!c.reshuffleBoard}"/>
+                <lightning:button  label="Reshuffle" title="Reshuffle" disabled="{!v.reshuffleDisabled}" onclick="{!c.reshuffleBoard}"/>
             </lightning:layoutItem>
         </lightning:layout>
 
