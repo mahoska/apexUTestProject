@@ -1,0 +1,25 @@
+.THIS {
+}
+
+.THIS .header-item {
+    font-weight: 600;
+    text-transform:uppercase;
+    letter-spacing: 0.5px;
+    font-size: small;
+}
+
+.THIS .Green {
+    color: green;
+}
+
+.THIS .Yellow {
+    color: yellow;
+}
+
+.THIS .Orange {
+    color: orange;
+}
+
+.THIS .Red {
+    color: red;
+}
