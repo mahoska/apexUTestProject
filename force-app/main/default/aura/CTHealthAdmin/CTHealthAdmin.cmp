@@ -2,7 +2,7 @@
   @description       : 
   @author            : Anna Makhovskaya
   @group             : 
-  @last modified on  : 11-22-2022
+  @last modified on  : 11-28-2022
   @last modified by  : Anna Makhovskaya
 -->
 <aura:component implements="flexipage:availableForAllPageTypes, force:appHostable">
@@ -17,10 +17,10 @@
             <lightning:layoutItem size="12"> 
                 <lightning:tabset variant="vertical" onselect="{!c.tabSelectHandler}">
                     <lightning:tab  label="Person View" id="person">
-                        Person View
+                        <c:CTRecentChanges  scope="person"/>
                     </lightning:tab>
                     <lightning:tab  label="Location View" id="location">
-                        Location View
+                        <c:CTRecentChanges scope="location"/>
                     </lightning:tab>
                 </lightning:tabset>
             </lightning:layoutItem>
