@@ -6,11 +6,10 @@
  * @last modified by  : Anna Makhovskaya
 **/
 ({
-    fetchUserInformation: function (component) {
-        console.log("In helper");
+    fetchLocationInformation: function (component) {
         const recordId = component.get("v.recordId");
         console.log("In helper--" + recordId);
-        const action = component.get("c.getPersonDetails");
+        const action = component.get("c.getLocationDetails");
         action.setParams({
             "recordId": recordId
         });
@@ -21,17 +20,16 @@
                 const resp = response.getReturnValue();
                 if (!resp && !resp.name) {
                     //user not found
-                    component.set("v.userFound", false);
-                    this.showToast("ERROR", "Please enter valid user id", "error");
+                    component.set("v.locationFound", false);
+                    this.showToast("ERROR", "Please enter valid location id", "error");
                 } else {
                     //user found
-                    component.set("v.userFound", true);
-                    component.set("v.userInfo", resp);
-                    console.log("RESP--: " + resp);
+                    component.set("v.locationFound", true);
+                    component.set("v.locationInfo", resp);
                 }
             } else {
-                component.set("v.userFound", false);
-                this.showToast("ERROR", "Please enter valid user id", "error");
+                component.set("v.locationFound", false);
+                this.showToast("ERROR", "Please enter valid location id", "error");
             }
         });
         $A.enqueueAction(action);

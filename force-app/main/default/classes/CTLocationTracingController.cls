@@ -2,7 +2,7 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 11-07-2022
+ * @last modified on  : 11-29-2022
  * @last modified by  : Anna Makhovskaya
 **/
 public with sharing class CTLocationTracingController {
@@ -14,7 +14,7 @@ public with sharing class CTLocationTracingController {
       */
     public static List<Location_Tracing__c> getVisitors(String locationId) {
 
-        return [SELECT Id, Name, Location__c, Person__c, Visit_Date__c, Person__r.Token__c, Person__r.Health_Status__c 
+        return [SELECT Id, Name, Location__c, Person__c, Visit_Date__c, Person__r.Token__c, Person__r.Health_Status__c,  Person__r.Name  
                 FROM Location_Tracing__c 
                 WHERE Location__c = :locationId 
                 ORDER BY Visit_Date__c DESC NULLS LAST];
@@ -27,7 +27,7 @@ public with sharing class CTLocationTracingController {
       */
     public static List<Location_Tracing__c> getLocationsByPersonIds(Set<Id> personIds) {
         
-        return [SELECT Id, Name, Location__c, Person__c, Visit_Date__c, Person__r.Token__c, Person__r.Health_Status__c  
+        return [SELECT Id, Name, Location__c, Person__c, Visit_Date__c, Person__r.Token__c, Person__r.Health_Status__c   
                 FROM Location_Tracing__c 
                 WHERE Person__c IN :personIds AND Visit_Date__c = LAST_N_DAYS:10 
                 ORDER BY Visit_Date__c DESC NULLS LAST];

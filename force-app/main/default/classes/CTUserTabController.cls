@@ -26,27 +26,25 @@ public with sharing class CTUserTabController {
         if(traces != null && traces.size() > 0){
             List<CloseContacts> closeContacts = new List<CloseContacts>();
             Set<Id> uniqueIds = new Set<Id>();
+            uniqueIds.add(recordId);
 
             for(People_Tracing__c trace : traces){
-                
-                if(!uniqueIds.contains(trace.Person_1__c) && trace.Person_1__c != recordId){
-                    CloseContacts cc = new CloseContacts();
+                CloseContacts cc = new CloseContacts();
+                if(!uniqueIds.contains(trace.Person_1__c) ){
                     cc.id = trace.Person_1__c;
                     cc.status = trace.Person_1__r.Health_Status__c;
                     cc.token = trace.Person_1__r.Token__c;
                     cc.contactDate = trace.Contact_Date__c;
                     cc.name = trace.Person_1__r.Name;
-                    closeContacts.add(cc);
                 }
-                if(!uniqueIds.contains(trace.Person_2__c) && trace.Person_2__c != recordId){
-                    CloseContacts cc = new CloseContacts();
+                if(!uniqueIds.contains(trace.Person_2__c) ){
                     cc.id = trace.Person_2__c;
                     cc.status = trace.Person_2__r.Health_Status__c;
                     cc.token = trace.Person_2__r.Token__c;
                     cc.contactDate = trace.Contact_Date__c;
                     cc.name = trace.Person_2__r.Name;
-                    closeContacts.add(cc);
                 }
+                closeContacts.add(cc);
             }
 
             info.contacts = closeContacts;
