@@ -2,16 +2,16 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 11-07-2022
+ * @last modified on  : 11-29-2022
  * @last modified by  : Anna Makhovskaya
 **/
 public with sharing class CTPeopleTracingController {
     
     public static List<People_Tracing__c> getTracing(String personId) {
 
-        return [SELECT Id, Name, Contact_Date__c, Contact_Type__c, Person_1__c, Person_2__c, Person_1__r.Health_Status__c, Person_1__r.Token__c, Person_2__r.Health_Status__c, Person_2__r.Token__c  
+        return [SELECT Id, Name, Contact_Date__c, Contact_Type__c, Person_1__c, Person_2__c, Person_1__r.Health_Status__c, Person_1__r.Token__c, Person_2__r.Health_Status__c, Person_2__r.Token__c, Person_1__r.Name, Person_2__r.Name 
                 FROM People_Tracing__c 
-                WHERE Person_1__c = :personId OR Person_2__c = :personId 
+                WHERE (Person_1__c = :personId OR Person_2__c = :personId) AND Contact_Date__c = LAST_N_DAYS:30 
                 ORDER BY Contact_Date__c DESC];
     }
 
