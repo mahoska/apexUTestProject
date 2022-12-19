@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<WebLink xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Get_details</fullName>
+    <availability>online</availability>
+    <displayType>button</displayType>
+    <linkType>javascript</linkType>
+    <masterLabel>Get details</masterLabel>
+    <openType>onClickJavaScript</openType>
+    <protected>false</protected>
+    <url>{!REQUIRESCRIPT(&quot;soap/ajax/35.0/connection.js&quot;)}
+{!REQUIRESCRIPT(&quot;soap/ajax/35.0/apex.js&quot;)}
+var obj = {
+&quot;videoId&quot;:&quot;{!Youtube_Video_Detail__c.Video_Id__c}&quot;,
+&quot;recId&quot;:&quot;{!Youtube_Video_Detail__c.Id}&quot;
+};
+sforce.apex.execute(&quot;YoutubeVideoDetails&quot;, &quot;details&quot;,obj);
+location.reload();</url>
+</WebLink>
