@@ -2,11 +2,12 @@
  * @description       : 
  * @author            : Anna Makhovskaya
  * @group             : 
- * @last modified on  : 12-19-2022
+ * @last modified on  : 12-21-2022
  * @last modified by  : Anna Makhovskaya
 **/
 import { LightningElement, track } from 'lwc';
-
+import addTodo from "@salesforce/apex/toDoController.addTodo";
+import getCurrentTodos from "@salesforce/apex/toDoController.getCurrentTodos";
 export default class ToDoManager extends LightningElement {
     time = "8:15 PM";
     greeting = "Good Evening";
@@ -15,6 +16,8 @@ export default class ToDoManager extends LightningElement {
 
     connectedCallback() {
         this.getTime();
+        //this.populateTodos();
+        this.fetchTodos();
 
         setInterval(() => {
             this.getTime();
@@ -59,15 +62,39 @@ export default class ToDoManager extends LightningElement {
         console.log('current value ', inputBox.value);
 
         const todo = {
-            todoId: this.todos.length,
             todoName: inputBox.value,
-            done: false,
-            todoDate: new Date()
+            done: false
         }
+
+        addTodo({ payload: JSON.stringify(todo) }).then(responce => {
+            console.log('Item inserted successfully');
+            //update list todos on UI
+            this.fetchTodos();
+        }).catch(error => {
+            console.error('Error in inserting todo item ' + error);
+        });
         this.todos.push(todo);
         inputBox.value = "";
     }
 
+    fetchTodos() {
+        getCurrentTodos().then(result => {
+            if (result) {
+                console.log('Retrived todos from server', result.length);
+                this.todos = result;
+            }
+        }).catch(error => {
+            console.error('Error in fetching todos ' + error);
+        });
+    }
+
+    updateHandler() {
+        this.fetchTodos();
+    }
+
+    deleteHandler() {
+        this.fetchTodos();
+    }
 
     get upcomingTasks() {
         return this.todos && this.todos.length
@@ -78,5 +105,29 @@ export default class ToDoManager extends LightningElement {
         return this.todos && this.todos.length
             ? this.todos.filter(todo => todo.done)
             : [];
+    }
+
+    populateTodos() {
+        const todos = [
+            {
+                todoId: 0,
+                todoName: "Feed the dog",
+                done: false,
+                todoDate: new Date()
+            },
+            {
+                todoId: 1,
+                todoName: "Wash the car",
+                done: false,
+                todoDate: new Date()
+            },
+            {
+                todoId: 2,
+                todoName: "Send email to manager",
+                done: true,
+                todoDate: new Date()
+            }
+        ];
+        this.todos = todos;
     }
 }
